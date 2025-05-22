@@ -13,7 +13,7 @@ var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"
 
 //Builder DB
 
-builder.Services.AddDbContext<FornecedorDAO>(options =>
+builder.Services.AddDbContext<DAO>(options =>
     options.UseSqlServer(connectionString));
 
 
@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, FornecedorDAO dao) =>
+app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, DAO dao) =>
 {
     dao.Fornecedores.Add(fornecedor);
     await dao.SaveChangesAsync();

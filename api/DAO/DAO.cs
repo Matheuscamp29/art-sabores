@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 namespace Art_Sabores.DAO
 {
-    public class FornecedorDAO: DbContext
+    public class DAO : DbContext
     {
-        public FornecedorDAO(DbContextOptions<FornecedorDAO> options)
+        public DAO(DbContextOptions<DAO> options)
             : base(options) { }
 
         public DbSet<Fornecedor> Fornecedores => Set<Fornecedor>();
+        public DbSet<MateriaPrima> MateriaPrima => Set<MateriaPrima>();
 
     }
 }
