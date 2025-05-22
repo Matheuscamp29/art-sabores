@@ -36,6 +36,9 @@ app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, DAO dao) =>
     return Results.Created($"/api/v1/fornecedor/{fornecedor.Id}", fornecedor);
 });
 
+app.MapGet("/api/v1/getFornecedores", async (DAO dao) => 
+    await dao.Fornecedores.ToListAsync());
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
