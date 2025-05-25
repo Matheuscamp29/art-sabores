@@ -3,8 +3,8 @@
     public class Salgado
     {
         public int Id { get; set; }
-        public string? salgado;
-        public float preco { get; set; }
+        public string? Nome { get; set; } //nome do salgadoooo
+        public float Preco { get; set; }
 
     }
 }
