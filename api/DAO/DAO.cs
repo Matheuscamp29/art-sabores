@@ -9,6 +9,7 @@ namespace Art_Sabores.DAO
 
         public DbSet<Fornecedor> Fornecedores => Set<Fornecedor>();
         public DbSet<MateriaPrima> MateriaPrima => Set<MateriaPrima>();
+        public DbSet<Salgado> Salgado => Set<Salgado>();
 
     }
 }
