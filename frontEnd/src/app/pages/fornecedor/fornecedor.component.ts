@@ -14,7 +14,7 @@ export class FornecedorComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.http.get<any[]>('https://localhost:32791/api/v1/getFornecedores')
+    this.http.get<any[]>('https://localhost:32771/api/v1/getFornecedores')
       .subscribe(data => this.itens = data);
   }
 }
