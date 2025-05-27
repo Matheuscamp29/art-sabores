@@ -13,7 +13,7 @@ var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING"
 
 //Builder DB
 
-builder.Services.AddDbContext<DAO>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 
@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 app.UseCors("AllowAll");
 
-app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, DAO dao) =>
+app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, AppDbContext dao) =>
 {
     dao.Fornecedores.Add(fornecedor);
     await dao.SaveChangesAsync();
@@ -46,7 +46,7 @@ app.MapPost("/api/v1/fornecedor", async (Fornecedor fornecedor, DAO dao) =>
     return Results.Created($"/api/v1/fornecedor/{fornecedor.Id}", fornecedor);
 });
 
-app.MapGet("/api/v1/getFornecedores", async (DAO dao) => 
+app.MapGet("/api/v1/getFornecedores", async (AppDbContext dao) => 
     await dao.Fornecedores.ToListAsync());
 
 
