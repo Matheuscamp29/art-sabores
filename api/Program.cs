@@ -58,7 +58,7 @@ app.MapPut("/api/v1/updateFornecedor/{id}", async (int id, Fornecedor input, App
 {
     var fornecedor = await dao.Fornecedores.FindAsync(id);
     if (fornecedor is null)
-        return Results.NotFound("Fornecedor n�o encontrado.");
+        return Results.NotFound("Fornecedor n�o encontrado.");
 
     // Atualize as propriedades que deseja modificar
     fornecedor.nome = input.nome;
@@ -72,13 +72,59 @@ app.MapDelete("/api/v1/deleteFornecedor/{id}", async (int id, AppDbContext dao) 
 {
     var fornecedor = await dao.Fornecedores.FindAsync(id);
     if (fornecedor is null)
-        return Results.NotFound("Fornecedor n�o encontrado.");
+        return Results.NotFound("Fornecedor n�o encontrado.");
 
     dao.Fornecedores.Remove(fornecedor);
     await dao.SaveChangesAsync();
 
     return Results.Ok($"Fornecedor com ID {id} deletado com sucesso.");
 });
+
+
+
+//Materia prima CRUD
+
+// Incluir Materia_Prima
+app.MapPost("/api/v1/materia_prima", async (Materia_Prima materia, AppDbContext dao) =>
+{
+    dao.Materias_Primas.Add(materia);
+    await dao.SaveChangesAsync();
+
+    return Results.Created($"/api/v1/materia_prima/{materia.Id}", materia);
+});
+
+// Listar todas as Materias_Primas
+app.MapGet("/api/v1/getMateriasPrimas", async (AppDbContext dao) => 
+    await dao.Materias_Primas.ToListAsync());
+
+// Atualizar Materia_Prima
+app.MapPut("/api/v1/updateMateriaPrima/{id}", async (int id, Materia_Prima input, AppDbContext dao) =>
+{
+    var materia = await dao.Materias_Primas.FindAsync(id);
+    if (materia is null)
+        return Results.NotFound("Matéria-prima não encontrada.");
+
+    // Atualizar o campo desejado
+    materia.produto = input.produto;
+
+    await dao.SaveChangesAsync();
+    return Results.Ok(materia);
+});
+
+// Deletar Materia_Prima
+app.MapDelete("/api/v1/deleteMateriaPrima/{id}", async (int id, AppDbContext dao) =>
+{
+    var materia = await dao.Materias_Primas.FindAsync(id);
+    if (materia is null)
+        return Results.NotFound("Matéria-prima não encontrada.");
+
+    dao.Materias_Primas.Remove(materia);
+    await dao.SaveChangesAsync();
+
+    return Results.Ok($"Matéria-prima com ID {id} deletada com sucesso.");
+});
+
+
 
 
 
