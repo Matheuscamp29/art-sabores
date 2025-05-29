@@ -4,7 +4,6 @@
     {
         public int Id { get; set; }
         public required string nome { get; set; }
-
         public String CNPJ { get; set; }
     }
 }

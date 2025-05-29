@@ -4,5 +4,6 @@ namespace Art_Sabores.Models
     {
         public int Id { get; set; }
         public required string Nome { get; set; }
+        public int quantidade { get; set;}
     }
 }
