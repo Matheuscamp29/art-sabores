@@ -1,10 +1,19 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Art_Sabores.Models
 {
-    public class Producao
+    public class Receita
     {
         public int Id { get; set; }
-        public string? NomeSalgado { get; set; }
-        public float quantMatPri { get; set; }
+        public int quantMatPri { get; set; }
+        public String unidadeMG { get; set; }
+        public bool constante { get; set; }
+        public int rendimento { get; set; }
+        [ForeignKey("Materia_prima")]
+        public int IdMateriaPrima { get; set; }
+        [ForeignKey("Salgado")]
+        public int IdSalgado {  get; set; }
+
 
     }
 
