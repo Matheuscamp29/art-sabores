@@ -5,7 +5,7 @@ namespace Art_Sabores.Models
     public class Receita
     {
         public int Id { get; set; }
-        public int quantMatPri { get; set; }
+        public float quantMatPri { get; set; }
         public String unidadeMG { get; set; }
         public bool constante { get; set; }
         public int rendimento { get; set; }
