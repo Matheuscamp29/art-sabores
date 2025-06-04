@@ -7,6 +7,6 @@ namespace Art_Sabores.Models
         [Key]
         public int Id { get; set; }
         public required string Nome { get; set; }
-        public int quantidade { get; set;}
+        public int Estoque { get; set;}
     }
 }
