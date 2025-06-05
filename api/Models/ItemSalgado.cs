@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Art_Sabores.Models
 {
-    public class ItemProduto
+    public class ItemSalgado
     {
         [Key]
         public int Id { get; set; }

@@ -7,8 +7,5 @@ namespace Art_Sabores.Models
     {
         [Key]
         public int Id { get; set; }
-        public int Subtotal { get; set; }
-        [ForeignKey("ItemProduto")]
-        public int IdItem { get; set; }
     }
 }
