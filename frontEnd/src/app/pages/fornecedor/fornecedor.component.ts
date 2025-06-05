@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component'; // ajuste conforme seu caminho real
 
 @Component({
   selector: 'app-fornecedor',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './fornecedor.component.html'
 })
 export class FornecedorComponent implements OnInit {
