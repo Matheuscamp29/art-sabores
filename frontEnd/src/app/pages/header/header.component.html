@@ -1,0 +1,19 @@
+<nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
+    <div class="text-xl font-semibold">
+        <a routerLink="/" class="hover:underline">Meu Sistema</a>
+    </div>
+
+    <ul class="flex space-x-4">
+        <li>
+            <a routerLink="/materias-primas" class="hover:underline">Matérias-Primas</a>
+        </li>
+        <!-- Adicione mais links conforme tiver mais páginas -->
+    </ul>
+
+    <button routerLink="/perfil" class="text-white hover:text-gray-300" aria-label="Perfil">
+        <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+            <path
+                d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+        </svg>
+    </button>
+</nav>
