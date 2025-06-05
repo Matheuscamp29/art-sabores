@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HeaderComponent } from "../header/header.component";
 
 
 @Component({
@@ -9,20 +10,21 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,   // Aqui importa o HttpClientModule
+    HttpClientModule, // Aqui importa o HttpClientModule
     ReactiveFormsModule,
-  ],
+    HeaderComponent
+],
   templateUrl: './materia-prima.component.html',
   styleUrls: ['./materia-prima.component.css']
 })
 
 export class MateriaPrimaComponent {
   mostrarFormulario = false;
-  materiaForm: FormGroup;
+  materiaPrimaForm: FormGroup;
   materias: { nome: string; estoque: number }[] = [];
 
   constructor(private fb: FormBuilder) {
-    this.materiaForm = this.fb.group({
+    this.materiaPrimaForm = this.fb.group({
       nome: ['', Validators.required],
       estoque: [0, [Validators.required, Validators.min(0)]],
     });
@@ -33,15 +35,15 @@ export class MateriaPrimaComponent {
   }
 
   salvarMateria() {
-    if (this.materiaForm.valid) {
-      this.materias.push(this.materiaForm.value);
+    if (this.materiaPrimaForm.valid) {
+      this.materias.push(this.materiaPrimaForm.value);
       this.mostrarFormulario = false;
-      this.materiaForm.reset({ nome: '', estoque: 0 });
+      this.materiaPrimaForm.reset({ nome: '', estoque: 0 });
     }
   }
 
   cancelarFormulario() {
     this.mostrarFormulario = false;
-    this.materiaForm.reset({ nome: '', estoque: 0 });
+    this.materiaPrimaForm.reset({ nome: '', estoque: 0 });
   }
 }
