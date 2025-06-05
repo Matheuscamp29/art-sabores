@@ -18,11 +18,19 @@ export class MateriaPrimaComponent implements OnInit {
   // URL base da API - ajuste conforme necessário
   private apiUrl = 'https://localhost:32771/api/v1';
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(private http: HttpClient, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.carregarMateriasPrimas();
     this.carregarFornecedores();
+
+    // Inicializa o formulário assim que o componente é carregado
+    this.materiaPrimaForm = this.fb.group({
+      nome: ['', Validators.required],
+      unidadeMedida: ['', Validators.required],
+      quantidadeMinima: [0, [Validators.required, Validators.min(0)]],
+      fornecedorId: ['', Validators.required]  // Você pode reativar o Validators.required aqui, se necessário
+    });
   }
 
   carregarMateriasPrimas() {
@@ -37,34 +45,26 @@ export class MateriaPrimaComponent implements OnInit {
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
-  
-    if (this.mostrarFormulario && !this.materiaPrimaForm) {
-      this.materiaPrimaForm = this.fb.group({
-        nome: ['', Validators.required],
-        unidadeMedida: ['', Validators.required],
-        quantidadeMinima: [0, [Validators.required, Validators.min(0)]],
-        fornecedorId: [''] // , Validators.required
-      });
-    }
   }
 
   salvarMateriaPrima() {
-    if (this.materiaPrimaForm.valid) {
-      const novaMateriaPrima = this.materiaPrimaForm.value;
-      
-      // Encontra o nome do fornecedor para exibição
-      const fornecedorSelecionado = this.fornecedores.find(f => f.id === novaMateriaPrima.fornecedorId);
-      novaMateriaPrima.fornecedorNome = fornecedorSelecionado ? fornecedorSelecionado.nome : 'Desconhecido';
-      
-      // Aqui você faria a chamada POST para a API
-      // this.http.post(`${this.apiUrl}/addMateriaPrima`, novaMateriaPrima).subscribe(...)
-      
-      // Temporário: adiciona localmente
-      this.itens.push(novaMateriaPrima);
-      this.mostrarFormulario = false;
-      this.materiaPrimaForm.reset();
-    }
+  if (this.materiaPrimaForm.valid) {
+    const novaMateriaPrima = this.materiaPrimaForm.value;
+
+    // Encontra o nome do fornecedor para exibição
+    const fornecedorSelecionado = this.fornecedores.find(f => f.id === novaMateriaPrima.fornecedorId);
+    novaMateriaPrima.fornecedorNome = fornecedorSelecionado ? fornecedorSelecionado.nome : 'Desconhecido';
+
+    // Aqui você faria a chamada POST para a API
+    // this.http.post(`${this.apiUrl}/addMateriaPrima`, novaMateriaPrima).subscribe(...)
+
+    // Temporário: adiciona localmente
+    this.itens.push(novaMateriaPrima);
+    this.mostrarFormulario = false;
+    this.materiaPrimaForm.reset();
   }
+}
+
 
   cancelarFormulario() {
     this.mostrarFormulario = false;
