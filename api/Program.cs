@@ -105,7 +105,7 @@ app.MapPut("/api/v1/updateMateriaPrima/{id}", async (int id, Materia_Prima input
         return Results.NotFound("Matéria-prima não encontrada.");
 
     // Atualizar o campo desejado
-    materia.produto = input.produto;
+    materia.Estoque = input.Estoque;
 
     await dao.SaveChangesAsync();
     return Results.Ok(materia);
