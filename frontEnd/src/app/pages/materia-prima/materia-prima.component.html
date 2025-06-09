@@ -7,7 +7,7 @@
   </div>
 
   <div *ngIf="mostrarFormulario" class="mb-6 p-4 bg-gray-100 rounded-lg">
-    <form [formGroup]="materiaPrimaForm" (ngSubmit)="salvarMateriaPrima()">
+    <form [formGroup]="materiaPrimaForm" (ngSubmit)="salvarMP()">
       <div class="mb-2">
         <label class="block font-medium">Nome:</label>
         <input type="text" formControlName="nome" placeholder="Digite o nome" class="border p-2 w-full rounded" />

@@ -1,19 +1,44 @@
 <nav class="bg-blue-600 text-white px-6 py-4 flex justify-between items-center shadow-md">
-  <div class="flex items-center space-x-3">
-    <img src="assets/img1.jpg" alt="Logo" class="h-8 w-auto">
-    <a routerLink="/" class="text-xl font-semibold hover:underline">Meu Sistema</a>
-  </div>
+    <div class="text-xl font-semibold">
+        <a routerLink="/" class="hover:underline">Art Sabores</a>
+    </div>
 
-  <ul class="flex space-x-4">
-    <li>
-      <a routerLink="/estoque" class="hover:underline">Estoque</a>
-    </li>
-  </ul>
+    <ul class="flex space-x-4">
+        <li>
+            <span class="font-medium">{{ currentPageTitle }}</span>
+        </li>
+    </ul>
 
-  <button routerLink="/cliente" class="text-white hover:text-gray-300" aria-label="Perfil">
-    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
-      <path
-        d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-    </svg>
-  </button>
+    <!-- Container do menu (alterado) -->
+    <div class="flex items-center">
+        <!-- Menu Dropdown -->
+        <div class="relative">
+            <button 
+                (click)="toggleMenu()"
+                class="flex items-center text-sm text-white rounded-full hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 px-3 py-1 transition"
+                aria-expanded="false"
+                aria-haspopup="true"
+            >
+                Menu
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
+            <!-- Itens do Menu (Dropdown) -->
+            <div 
+                *ngIf="isMenuOpen"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+            >
+                <a 
+                    *ngFor="let page of menuPages" 
+                    [routerLink]="page.path"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-white"
+                    (click)="closeMenu()"
+                >
+                    {{ page.title }}
+                </a>
+            </div>
+        </div>
+    </div>
 </nav>
