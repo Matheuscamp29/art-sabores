@@ -80,6 +80,49 @@ app.MapDelete("/api/v1/deleteFornecedor/{id}", async (int id, AppDbContext dao) 
     return Results.Ok($"Fornecedor com ID {id} deletado com sucesso.");
 });
 
+// CRUD Salgado
+
+// Incluir Salgado
+app.MapPost("/api/v1/salgado", async (Salgado salgado, AppDbContext dao) =>
+{
+    dao.Salgados.Add(salgado);
+    await dao.SaveChangesAsync();
+
+    return Results.Created($"/api/v1/salgado/{salgado.Id}", salgado);
+});
+
+// Listar todos os Salgados
+app.MapGet("/api/v1/getSalgados", async (AppDbContext dao) =>
+    await dao.Salgados.ToListAsync());
+
+// Atualizar Salgado
+app.MapPut("/api/v1/updateSalgado/{id}", async (int id, Salgado input, AppDbContext dao) =>
+{
+    var salgado = await dao.Salgados.FindAsync(id);
+    if (salgado is null)
+        return Results.NotFound("Salgado não encontrado.");
+
+    salgado.Nome = input.Nome;
+    salgado.Preco = input.Preco;
+    salgado.Estoque = input.Estoque;
+
+    await dao.SaveChangesAsync();
+    return Results.Ok(salgado);
+});
+
+// Deletar Salgado
+app.MapDelete("/api/v1/deleteSalgado/{id}", async (int id, AppDbContext dao) =>
+{
+    var salgado = await dao.Salgados.FindAsync(id);
+    if (salgado is null)
+        return Results.NotFound("Salgado não encontrado.");
+
+    dao.Salgados.Remove(salgado);
+    await dao.SaveChangesAsync();
+
+    return Results.Ok($"Salgado com ID {id} deletado com sucesso.");
+});
+
 
 
 //Materia prima CRUD

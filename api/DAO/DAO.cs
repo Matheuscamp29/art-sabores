@@ -19,4 +19,16 @@ namespace Art_Sabores.DAO
         public DbSet<NotaFiscalCliente> Vendas_Clientes_Receita => Set<NotaFiscalCliente>();
         public DbSet<NotaFiscalFornecedor> Vendas_Fornecedores_MateriaPrima => Set<NotaFiscalFornecedor>();
     }
+
+    public class NotaFiscalFornecedor
+    {
+    }
+
+    public class NotaFiscalCliente
+    {
+    }
+
+    public class MateriaPrima
+    {
+    }
 }
