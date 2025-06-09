@@ -124,6 +124,48 @@ app.MapDelete("/api/v1/deleteSalgado/{id}", async (int id, AppDbContext dao) =>
 });
 
 
+// CRUD Cliente
+
+// Incluir Cliente
+app.MapPost("/api/v1/cliente", async (Cliente cliente, AppDbContext dao) =>
+{
+    dao.Clientes.Add(cliente);
+    await dao.SaveChangesAsync();
+    return Results.Created($"/api/v1/cliente/{cliente.Id}", cliente);
+});
+
+// Listar todos os Clientes
+app.MapGet("/api/v1/getClientes", async (AppDbContext dao) =>
+    await dao.Clientes.ToListAsync());
+
+// Atualizar Cliente
+app.MapPut("/api/v1/updateCliente/{id}", async (int id, Cliente input, AppDbContext dao) =>
+{
+    var cliente = await dao.Clientes.FindAsync(id);
+    if (cliente is null)
+        return Results.NotFound("Cliente não encontrado.");
+
+    cliente.Nome = input.Nome;
+    cliente.Telefone = input.Telefone;
+
+    await dao.SaveChangesAsync();
+    return Results.Ok(cliente);
+});
+
+// Deletar Cliente
+app.MapDelete("/api/v1/deleteCliente/{id}", async (int id, AppDbContext dao) =>
+{
+    var cliente = await dao.Clientes.FindAsync(id);
+    if (cliente is null)
+        return Results.NotFound("Cliente não encontrado.");
+
+    dao.Clientes.Remove(cliente);
+    await dao.SaveChangesAsync();
+
+    return Results.Ok($"Cliente com ID {id} deletado com sucesso.");
+});
+
+
 
 //Materia prima CRUD
 

@@ -12,6 +12,7 @@ namespace Art_Sabores.DAO
         public DbSet<Salgado> Salgados => Set<Salgado>();
         public DbSet<Receita> Receitas => Set<Receita>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
+
         public DbSet<ItemMateriaPrima> ItemsMateriaPrima => Set<ItemMateriaPrima>();
         public DbSet<ItemSalgado> ItemProdutos => Set<ItemSalgado>();
         public DbSet<PedidoCliente> PedidosCliente => Set<PedidoCliente>();

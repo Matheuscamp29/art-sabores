@@ -24,17 +24,25 @@ export class ClienteComponent implements OnInit {
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
+
     if (this.mostrarFormulario && !this.clienteForm) {
-      this.clienteForm = this.fb.group({ nome: ['', Validators.required] });
+      this.clienteForm = this.fb.group({
+      nome: ['', Validators.required],
+      telefone: ['', [Validators.required, Validators.pattern('^\\+?[0-9]*$')]]
+    });
     }
   }
 
   salvarCliente() {
     if (this.clienteForm.valid) {
       const novoCliente = this.clienteForm.value;
-      this.clientes.push(novoCliente);
-      this.mostrarFormulario = false;
-      this.clienteForm.reset();
+
+      this.http.post('https://localhost:32771/api/v1/cliente', novoCliente)
+        .subscribe(response => {
+          this.clientes.push(response);
+          this.mostrarFormulario = false;
+          this.clienteForm.reset();
+        });
     }
   }
 
