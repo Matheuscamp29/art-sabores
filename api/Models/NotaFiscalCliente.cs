@@ -10,7 +10,9 @@ namespace Art_Sabores.Models
         public DateTime dateTime { get; set; }
         [ForeignKey("Cliente")]
         public int IdCliente { get; set; }
+        public Cliente? cliente { get; set; }
         [ForeignKey("PedidoCliente")]
         public int IdPedido { get; set; }
+        public PedidoCliente? pedidoCliente { get; set; }
     }
 }

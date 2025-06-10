@@ -1,5 +1,6 @@
 using Art_Sabores.DAO;
 using Art_Sabores.Models;
+using Art_Sabores.DTOs;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
 
@@ -207,6 +208,117 @@ app.MapDelete("/api/v1/deleteMateriaPrima/{id}", async (int id, AppDbContext dao
     await dao.SaveChangesAsync();
 
     return Results.Ok($"Matéria-prima com ID {id} deletada com sucesso.");
+});
+
+
+
+//CRUD Pedido Salgado
+
+app.MapPost("/api/v1/PedidoCliente/fechar", async (PedidoClienteDTO dto, AppDbContext dao) =>
+{
+    var pedido = new PedidoCliente();
+    dao.PedidosCliente.Add(pedido);
+    await dao.SaveChangesAsync();
+
+    foreach (var item in dto.Itens)
+    {
+        dao.ItemSalgados.Add(new ItemSalgado
+        {
+            IdSalgado = item.IdSalgado,
+            IdPedido = pedido.Id,
+            Quantidade = item.Quantidade
+        });
+    }
+    await dao.SaveChangesAsync();
+
+    var nota = new NotaFiscalCliente
+    {
+        NFE = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+        dateTime = DateTime.Now,
+        IdCliente = dto.IdCliente,
+        IdPedido = pedido.Id
+    };
+    dao.Vendas_Clientes_Receita.Add(nota);
+
+    await dao.SaveChangesAsync();
+
+    return Results.Ok(new { PedidoId = pedido.Id, NotaFiscal = nota.NFE });
+
+});
+
+app.MapDelete("/api/v1/PedidoCliente/deletar/{id}", async (int id, AppDbContext dao) =>
+{
+    var pedido = await dao.PedidosCliente.FindAsync(id);
+    if (pedido == null)
+        Results.NotFound("Pedido não encontrado.");
+
+    var itens = dao.ItemSalgados.Where(i => i.IdPedido == id);
+    dao.ItemSalgados.RemoveRange(itens);
+
+    var nota = await dao.Vendas_Clientes_Receita.FirstOrDefaultAsync(n => n.IdPedido == id);
+    if (nota != null)
+        dao.Vendas_Clientes_Receita.Remove(nota);
+
+    dao.PedidosCliente.Remove(pedido);
+
+    await dao.SaveChangesAsync();
+
+    return Results.Ok("Pedidos e relacionados deletados com sucesso");
+});
+
+
+
+//CRUD Pedido Fornecedor
+app.MapPost("/api/v1/PedidoFornecedor/fechar", async (PedidoFornecedorDTO dto, AppDbContext dao) =>
+{
+    var pedido = new PedidoFornecedor();
+    dao.PedidoFornecedores.Add(pedido);
+    await dao.SaveChangesAsync();
+
+    foreach (var item in dto.Itens)
+    {
+        dao.ItemsMateriaPrima.Add(new ItemMateriaPrima
+        {
+            IdMateriaPrima = item.IdMateriaPrima,
+            IdPedido = pedido.Id,
+            Quantidade = item.Quantidade
+        });
+    }
+    await dao.SaveChangesAsync();
+
+    var nota = new NotaFiscalFornecedor
+    {
+        NFE = Guid.NewGuid().ToString().Substring(0, 50).ToUpper(),
+        dateTime = DateTime.Now,
+        IdFornecedor = dto.IdFornecedor,
+        IdPedido = pedido.Id
+    };
+    dao.Vendas_Fornecedores_MateriaPrima.Add(nota);
+
+    await dao.SaveChangesAsync();
+
+    return Results.Ok(new { PedidoId = pedido.Id, NotaFiscal = nota.NFE });
+
+});
+
+app.MapDelete("/api/v1/PedidoFornecedor/deletar/{id}", async (int id, AppDbContext dao) =>
+{
+    var pedido = await dao.PedidoFornecedores.FindAsync(id);
+    if (pedido == null)
+        Results.NotFound("Pedido não encontrado.");
+
+    var itens = dao.ItemsMateriaPrima.Where(i => i.IdPedido == id);
+    dao.ItemsMateriaPrima.RemoveRange(itens);
+
+    var nota = await dao.Vendas_Fornecedores_MateriaPrima.FirstOrDefaultAsync(n => n.IdPedido == id);
+    if (nota != null)
+        dao.Vendas_Fornecedores_MateriaPrima.Remove(nota);
+
+    dao.PedidoFornecedores.Remove(pedido);
+
+    await dao.SaveChangesAsync();
+
+    return Results.Ok("Pedidos e relacionados deletados com sucesso");
 });
 
 

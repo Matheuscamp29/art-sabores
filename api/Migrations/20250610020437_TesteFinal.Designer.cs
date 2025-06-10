@@ -4,6 +4,7 @@ using Art_Sabores.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Art_Sabores.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class DAOModelSnapshot : ModelSnapshot
+    [Migration("20250610020437_TesteFinal")]
+    partial class TesteFinal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,7 +84,7 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
-                    b.Property<int?>("materiaPrimaId")
+                    b.Property<int>("materiaPrimaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -110,10 +113,10 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
-                    b.Property<int?>("pedidoClienteId")
+                    b.Property<int>("pedidoClienteId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("salgadoId")
+                    b.Property<int>("salgadoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -122,7 +125,7 @@ namespace Art_Sabores.Migrations
 
                     b.HasIndex("salgadoId");
 
-                    b.ToTable("ItemSalgados");
+                    b.ToTable("ItemProdutos");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.MateriaPrima", b =>
@@ -156,13 +159,13 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
-                    b.Property<int?>("clienteId")
+                    b.Property<int>("clienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("pedidoClienteId")
+                    b.Property<int>("pedidoClienteId")
                         .HasColumnType("int");
 
                     b.HasKey("NFE");
@@ -179,19 +182,19 @@ namespace Art_Sabores.Migrations
                     b.Property<string>("NFE")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("IdFornecedor")
+                    b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPedido")
+                    b.Property<int>("Id_Fornecedor")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("fornecedorId")
+                    b.Property<int>("fornecedorId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("pedidoFornecedorId")
+                    b.Property<int>("pedidoFornecedorId")
                         .HasColumnType("int");
 
                     b.HasKey("NFE");
@@ -252,10 +255,10 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("Rendimento")
                         .HasColumnType("int");
 
-                    b.Property<int?>("materiaPrimaId")
+                    b.Property<int>("materiaPrimaId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("salgadoId")
+                    b.Property<int>("salgadoId")
                         .HasColumnType("int");
 
                     b.Property<string>("unidade")
@@ -303,7 +306,9 @@ namespace Art_Sabores.Migrations
 
                     b.HasOne("Art_Sabores.Models.MateriaPrima", "materiaPrima")
                         .WithMany()
-                        .HasForeignKey("materiaPrimaId");
+                        .HasForeignKey("materiaPrimaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PedidoFornecedor");
 
@@ -314,11 +319,15 @@ namespace Art_Sabores.Migrations
                 {
                     b.HasOne("Art_Sabores.Models.PedidoCliente", "pedidoCliente")
                         .WithMany()
-                        .HasForeignKey("pedidoClienteId");
+                        .HasForeignKey("pedidoClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Art_Sabores.Models.Salgado", "salgado")
                         .WithMany()
-                        .HasForeignKey("salgadoId");
+                        .HasForeignKey("salgadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("pedidoCliente");
 
@@ -329,11 +338,15 @@ namespace Art_Sabores.Migrations
                 {
                     b.HasOne("Art_Sabores.Models.Cliente", "cliente")
                         .WithMany()
-                        .HasForeignKey("clienteId");
+                        .HasForeignKey("clienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Art_Sabores.Models.PedidoCliente", "pedidoCliente")
                         .WithMany()
-                        .HasForeignKey("pedidoClienteId");
+                        .HasForeignKey("pedidoClienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("cliente");
 
@@ -344,11 +357,15 @@ namespace Art_Sabores.Migrations
                 {
                     b.HasOne("Art_Sabores.Models.Fornecedor", "fornecedor")
                         .WithMany()
-                        .HasForeignKey("fornecedorId");
+                        .HasForeignKey("fornecedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Art_Sabores.Models.PedidoFornecedor", "pedidoFornecedor")
                         .WithMany()
-                        .HasForeignKey("pedidoFornecedorId");
+                        .HasForeignKey("pedidoFornecedorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("fornecedor");
 
@@ -359,11 +376,15 @@ namespace Art_Sabores.Migrations
                 {
                     b.HasOne("Art_Sabores.Models.MateriaPrima", "materiaPrima")
                         .WithMany()
-                        .HasForeignKey("materiaPrimaId");
+                        .HasForeignKey("materiaPrimaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Art_Sabores.Models.Salgado", "salgado")
                         .WithMany()
-                        .HasForeignKey("salgadoId");
+                        .HasForeignKey("salgadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("materiaPrima");
 

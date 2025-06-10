@@ -1,10 +1,12 @@
 
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Art_Sabores.Models
 {
     public class Receita //Lista relação de matéria prima e salgado, registra rendimento
     {
+        [Key]
         public int Id { get; set; }
 
         public int QuantidadeMatPrim { get; set; }
@@ -13,9 +15,10 @@ namespace Art_Sabores.Models
         public int Rendimento { get; set; }
         [ForeignKey("Materia_prima")]
         public int IdMateriaPrima { get; set; }
+        public MateriaPrima? materiaPrima { get; set; }
         [ForeignKey("Salgado")]
         public int IdSalgado { get; set; }
-
+        public Salgado? salgado { get; set; }
 
     }
 }

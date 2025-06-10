@@ -9,8 +9,10 @@ namespace Art_Sabores.Models
         public int Id { get; set; }
         [ForeignKey("Salgado")]
         public int IdSalgado{get; set;}
+        public Salgado? salgado { get; set; }
         [ForeignKey("PedidoCliente")]
         public int IdPedido { get; set;}
+        public PedidoCliente? pedidoCliente { get; set; }
         public int Quantidade { get; set;}
     }
 }
