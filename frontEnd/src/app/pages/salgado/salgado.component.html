@@ -1,7 +1,6 @@
-<app-header></app-header>
 <div class="p-6 max-w-6xl mx-auto">
     <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Gerenciar Salgados</h1>
+        <h1 class="text-2xl font-bold">Salgados</h1>
         <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" (click)="toggleFormulario()">
             {{ mostrarFormulario ? "Fechar Formulário" : "Novo Salgado" }}
         </button>
@@ -14,8 +13,7 @@
                 <input type="text" formControlName="nome" class="border p-2 w-full rounded"
                     placeholder="Digite o nome do salgado" />
                 <small class="text-red-500" *ngIf="
-            salgadoForm.get('nome')?.invalid && salgadoForm.get('nome')?.touched
-          ">
+            salgadoForm.get('nome')?.invalid && salgadoForm.get('nome')?.touched">
                     Nome é obrigatório.
                 </small>
             </div>

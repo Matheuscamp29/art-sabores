@@ -7,7 +7,7 @@ import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-salgado',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './salgado.component.html'
 })
 export class SalgadoComponent implements OnInit {
@@ -37,9 +37,14 @@ export class SalgadoComponent implements OnInit {
   salvarSalgado() {
     if (this.salgadoForm.valid) {
       const novoSalgado = this.salgadoForm.value;
-      this.salgados.push(novoSalgado); // Simulação local
-      this.mostrarFormulario = false;
-      this.salgadoForm.reset();
+
+      // Envia para a API
+      this.http.post('https://localhost:32771/api/v1/salgado', novoSalgado)
+        .subscribe(response => {
+          this.salgados.push(response); // Adiciona o novo salgado após resposta do backend
+          this.mostrarFormulario = false;
+          this.salgadoForm.reset();
+        });
     }
   }
 

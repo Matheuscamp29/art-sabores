@@ -80,6 +80,91 @@ app.MapDelete("/api/v1/deleteFornecedor/{id}", async (int id, AppDbContext dao) 
     return Results.Ok($"Fornecedor com ID {id} deletado com sucesso.");
 });
 
+// CRUD Salgado
+
+// Incluir Salgado
+app.MapPost("/api/v1/salgado", async (Salgado salgado, AppDbContext dao) =>
+{
+    dao.Salgados.Add(salgado);
+    await dao.SaveChangesAsync();
+
+    return Results.Created($"/api/v1/salgado/{salgado.Id}", salgado);
+});
+
+// Listar todos os Salgados
+app.MapGet("/api/v1/getSalgados", async (AppDbContext dao) =>
+    await dao.Salgados.ToListAsync());
+
+// Atualizar Salgado
+app.MapPut("/api/v1/updateSalgado/{id}", async (int id, Salgado input, AppDbContext dao) =>
+{
+    var salgado = await dao.Salgados.FindAsync(id);
+    if (salgado is null)
+        return Results.NotFound("Salgado não encontrado.");
+
+    salgado.Nome = input.Nome;
+    salgado.Preco = input.Preco;
+    salgado.Estoque = input.Estoque;
+
+    await dao.SaveChangesAsync();
+    return Results.Ok(salgado);
+});
+
+// Deletar Salgado
+app.MapDelete("/api/v1/deleteSalgado/{id}", async (int id, AppDbContext dao) =>
+{
+    var salgado = await dao.Salgados.FindAsync(id);
+    if (salgado is null)
+        return Results.NotFound("Salgado não encontrado.");
+
+    dao.Salgados.Remove(salgado);
+    await dao.SaveChangesAsync();
+
+    return Results.Ok($"Salgado com ID {id} deletado com sucesso.");
+});
+
+
+// CRUD Cliente
+
+// Incluir Cliente
+app.MapPost("/api/v1/cliente", async (Cliente cliente, AppDbContext dao) =>
+{
+    dao.Clientes.Add(cliente);
+    await dao.SaveChangesAsync();
+    return Results.Created($"/api/v1/cliente/{cliente.Id}", cliente);
+});
+
+// Listar todos os Clientes
+app.MapGet("/api/v1/getClientes", async (AppDbContext dao) =>
+    await dao.Clientes.ToListAsync());
+
+// Atualizar Cliente
+app.MapPut("/api/v1/updateCliente/{id}", async (int id, Cliente input, AppDbContext dao) =>
+{
+    var cliente = await dao.Clientes.FindAsync(id);
+    if (cliente is null)
+        return Results.NotFound("Cliente não encontrado.");
+
+    cliente.Nome = input.Nome;
+    cliente.Telefone = input.Telefone;
+
+    await dao.SaveChangesAsync();
+    return Results.Ok(cliente);
+});
+
+// Deletar Cliente
+app.MapDelete("/api/v1/deleteCliente/{id}", async (int id, AppDbContext dao) =>
+{
+    var cliente = await dao.Clientes.FindAsync(id);
+    if (cliente is null)
+        return Results.NotFound("Cliente não encontrado.");
+
+    dao.Clientes.Remove(cliente);
+    await dao.SaveChangesAsync();
+
+    return Results.Ok($"Cliente com ID {id} deletado com sucesso.");
+});
+
 
 
 //Materia prima CRUD
