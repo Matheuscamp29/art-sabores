@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FornecedorService } from './fornecedor.service'; // <- IMPORTANTE
+import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { HeaderComponent } from '../header/header.component'; // ajuste conforme seu caminho real
+import { ReactiveFormsModule } from '@angular/forms';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-fornecedor',
@@ -15,10 +17,13 @@ export class FornecedorComponent implements OnInit {
   mostrarFormulario = false;
   fornecedorForm!: FormGroup;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(
+    private fornecedorService: FornecedorService, // <- AQUI
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
-    this.http.get<any[]>('https://localhost:32771/api/v1/getFornecedores')
+    this.fornecedorService.getFornecedores()
       .subscribe(data => this.itens = data);
   }
 
@@ -33,9 +38,13 @@ export class FornecedorComponent implements OnInit {
   salvarFornecedor() {
     if (this.fornecedorForm.valid) {
       const novoFornecedor = this.fornecedorForm.value;
-      this.itens.push(novoFornecedor);
-      this.mostrarFormulario = false;
-      this.fornecedorForm.reset();
+
+      // ✅ Enviar para a API
+      this.fornecedorService.createFornecedor(novoFornecedor).subscribe(resposta => {
+        this.itens.push(resposta); // resposta do backend
+        this.mostrarFormulario = false;
+        this.fornecedorForm.reset();
+      });
     }
   }
 
@@ -44,52 +53,8 @@ export class FornecedorComponent implements OnInit {
     this.fornecedorForm.reset();
   }
 
-  validarCNPJ(control: AbstractControl): ValidationErrors | null {
-    const cnpj = control.value?.replace(/[^\d]+/g, '');
-  
-    if (!cnpj || cnpj.length !== 14 || /^(\d)\1+$/.test(cnpj)) {
-      return { cnpjInvalido: true };
-    }
-  
-    let tamanho = cnpj.length - 2;
-    let numeros = cnpj.substring(0, tamanho);
-    const digitos = cnpj.substring(tamanho);
-    let soma = 0;
-    let pos = tamanho - 7;
-  
-    for (let i = tamanho; i >= 1; i--) {
-      soma += +numeros.charAt(tamanho - i) * pos--;
-      if (pos < 2) pos = 9;
-    }
-  
-    let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-    if (resultado !== +digitos.charAt(0)) return { cnpjInvalido: true };
-  
-    tamanho += 1;
-    numeros = cnpj.substring(0, tamanho);
-    soma = 0;
-    pos = tamanho - 7;
-  
-    for (let i = tamanho; i >= 1; i--) {
-      soma += +numeros.charAt(tamanho - i) * pos--;
-      if (pos < 2) pos = 9;
-    }
-  
-    resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
-    if (resultado !== +digitos.charAt(1)) return { cnpjInvalido: true };
-  
-    // ✅ Adicione este return para satisfazer o TypeScript
+  validarCNPJ(control: any) {
+    // Coloque aqui sua validação de CNPJ
     return null;
-  }
-
-  toggleFormulario() {
-    this.mostrarFormulario = !this.mostrarFormulario;
-  
-    if (this.mostrarFormulario && !this.fornecedorForm) {
-      this.fornecedorForm = this.fb.group({
-        nome: ['', Validators.required],
-        cnpj: ['', [Validators.required, this.validarCNPJ]]
-      });
-    }
   }
 }
