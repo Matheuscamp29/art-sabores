@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Art_Sabores.Models
 {
-    public class Materia_Prima
+    public class MateriaPrima
     {
         [Key]
         public int Id { get; set; }

@@ -85,7 +85,7 @@ app.MapDelete("/api/v1/deleteFornecedor/{id}", async (int id, AppDbContext dao) 
 //Materia prima CRUD
 
 // Incluir Materia_Prima
-app.MapPost("/api/v1/materia_prima", async (Materia_Prima materia, AppDbContext dao) =>
+app.MapPost("/api/v1/materia_prima", async (MateriaPrima materia, AppDbContext dao) =>
 {
     dao.Add(materia);
     await dao.SaveChangesAsync();
@@ -98,7 +98,7 @@ app.MapGet("/api/v1/getMateriasPrimas", async (AppDbContext dao) =>
     await dao.MateriaPrimas.ToListAsync());
 
 // Atualizar Materia_Prima
-app.MapPut("/api/v1/updateMateriaPrima/{id}", async (int id, Materia_Prima input, AppDbContext dao) =>
+app.MapPut("/api/v1/updateMateriaPrima/{id}", async (int id, MateriaPrima input, AppDbContext dao) =>
 {
     var materia = await dao.MateriaPrimas.FindAsync(id);
     if (materia is null)

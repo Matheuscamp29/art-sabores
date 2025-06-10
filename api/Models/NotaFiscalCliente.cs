@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Art_Sabores.Models
 {
-    public class venda_cliente_receita
+    public class NotaFiscalCliente
     {
         [Key]
         public required String NFE { get; set; }

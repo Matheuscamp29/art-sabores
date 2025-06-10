@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Art_Sabores.Models
 {
-    public class venda_fornecedor_materiaPrima
+    public class NotaFiscalFornecedor
     {
         [Key]
         public required String NFE { get; set; }
