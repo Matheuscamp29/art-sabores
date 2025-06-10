@@ -11,8 +11,10 @@ import { HeaderComponent } from '../header/header.component';
   standalone: true,
   imports: [CommonModule, HttpClientModule, ReactiveFormsModule, HeaderComponent],
   templateUrl: './fornecedor.component.html'
+  
 })
 export class FornecedorComponent implements OnInit {
+  editandoFornecedor: any = null;
   itens: any[] = [];
   mostrarFormulario = false;
   fornecedorForm!: FormGroup;
@@ -20,7 +22,7 @@ export class FornecedorComponent implements OnInit {
   constructor(
     private fornecedorService: FornecedorService, // <- AQUI
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.fornecedorService.getFornecedores()
@@ -33,6 +35,29 @@ export class FornecedorComponent implements OnInit {
       nome: ['', Validators.required],
       cnpj: ['', [Validators.required, this.validarCNPJ]]
     });
+  }
+  editarFornecedor(fornecedor: any) {
+    this.mostrarFormulario = true;
+    this.fornecedorForm = this.fb.group({
+      nome: [fornecedor.nome, Validators.required],
+      cnpj: [fornecedor.cnpj, [Validators.required, this.validarCNPJ]]
+    });
+
+    // Pode guardar o ID ou o próprio objeto para saber que está editando
+    this.editandoFornecedor = fornecedor; // <- precisa declarar essa variável no topo
+  }
+
+  excluirFornecedor(fornecedor: any) {
+    const confirmacao = confirm(`Tem certeza que deseja excluir o fornecedor "${fornecedor.nome}"?`);
+    if (confirmacao) {
+      // Caso use backend:
+      this.fornecedorService.deleteFornecedor(fornecedor.id).subscribe(() => {
+        this.itens = this.itens.filter(f => f !== fornecedor);
+      });
+
+      // Caso esteja apenas em memória:
+      // this.itens = this.itens.filter(f => f !== fornecedor);
+    }
   }
 
   salvarFornecedor() {
