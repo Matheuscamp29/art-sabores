@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MateriaPrimaService {
-  private apiUrl = 'https://localhost:32771/api/v1'; // URL da API do back-end
+  private apiUrl = 'https://localhost:32769/api/v1'; // URL da API do back-end
 
   constructor(private http: HttpClient) { }
 

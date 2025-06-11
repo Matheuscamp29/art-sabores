@@ -14,7 +14,6 @@ export class HeaderComponent {
   // Mapeamento das rotas para nomes amigáveis
   pageTitles: { [key: string]: string } = {
     '/fornecedor': 'Fornecedores',
-    '/salgado': 'Salgados',
     '/cliente': 'Clientes',
     '/pedido-fornecedor': 'Pedidos Fornecedor',
     '/pedido-cliente': 'Pedidos Clientes',
@@ -23,7 +22,6 @@ export class HeaderComponent {
 
   menuPages = [
     { path: '/fornecedor', title: 'Fornecedores' },
-    { path: '/salgado', title: 'Salgados' },
     { path: '/cliente', title: 'Clientes' },
     { path: '/pedido-cliente', title: 'Pedidos Clientes' },
     { path: '/pedido-fornecedor', title: 'Pedidos Fornecedores' },

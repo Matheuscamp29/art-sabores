@@ -19,6 +19,9 @@ import { HeaderComponent } from "../header/header.component";
 })
 
 export class MateriaPrimaComponent {
+editarMateriaPrima(_t97: any) {
+throw new Error('Method not implemented.');
+}
 fornecedores: any;
 itens: any;
 salvarMP() {
