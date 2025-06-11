@@ -10,10 +10,8 @@
         <form [formGroup]="salgadoForm" (ngSubmit)="salvarSalgado()">
             <div class="mb-2">
                 <label class="block font-medium">Nome:</label>
-                <input type="text" formControlName="nome" class="border p-2 w-full rounded"
-                    placeholder="Digite o nome do salgado" />
-                <small class="text-red-500" *ngIf="
-            salgadoForm.get('nome')?.invalid && salgadoForm.get('nome')?.touched">
+                <input type="text" formControlName="nome" class="border p-2 w-full rounded" placeholder="Digite o nome do salgado" />
+                <small class="text-red-500" *ngIf="salgadoForm.get('nome')?.invalid && salgadoForm.get('nome')?.touched">
                     Nome é obrigatório.
                 </small>
             </div>
@@ -32,8 +30,7 @@
                 <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                     Salvar
                 </button>
-                <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    (click)="cancelarFormulario()">
+                <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" (click)="cancelarFormulario()">
                     Cancelar
                 </button>
             </div>

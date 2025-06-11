@@ -1,30 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { SalgadoService } from './salgado.service'; // <- AQUI
 import { HeaderComponent } from '../header/header.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-salgado',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './salgado.component.html'
+  templateUrl: './salgado.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    HeaderComponent 
+  ]
 })
 export class SalgadoComponent implements OnInit {
   salgados: any[] = [];
   mostrarFormulario = false;
   salgadoForm!: FormGroup;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(
+    private http: HttpClient,
+    private salgadoService: SalgadoService, // <- AQUI
+    private fb: FormBuilder
+  ) {}
 
-  ngOnInit(): void {
-    this.http.get<any[]>('https://localhost:32771/api/v1/getSalgados')
+  ngOnInit() {
+    this.salgadoService.getSalgados()
       .subscribe(data => this.salgados = data);
   }
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
-
     if (this.mostrarFormulario && !this.salgadoForm) {
       this.salgadoForm = this.fb.group({
         nome: ['', Validators.required],
@@ -38,10 +47,9 @@ export class SalgadoComponent implements OnInit {
     if (this.salgadoForm.valid) {
       const novoSalgado = this.salgadoForm.value;
 
-      // Envia para a API
-      this.http.post('https://localhost:32771/api/v1/salgado', novoSalgado)
+      this.salgadoService.createSalgado(novoSalgado)
         .subscribe(response => {
-          this.salgados.push(response); // Adiciona o novo salgado após resposta do backend
+          this.salgados.push(response);
           this.mostrarFormulario = false;
           this.salgadoForm.reset();
         });
