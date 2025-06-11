@@ -11,50 +11,79 @@
   <div *ngIf="mostrarFormulario" class="mb-6 p-4 bg-gray-100 rounded-lg">
     <form [formGroup]="pedidoForm" (ngSubmit)="salvarPedido()">
       <div class="mb-2">
-        <label class="block font-medium">quantidade:</label>
-        <input type="number" formControlName="quantidade" class="border p-2 w-full rounded" min="0" />
-        <small class="text-red-500" *ngIf="pedidoForm.get('quantidade')?.invalid && pedidoForm.get('quantidade')?.touched">
-          quantidade deve ser um valor positivo.
+        <label class="block font-medium">Cliente:</label>
+        <select formControlName="idCliente" class="border p-2 w-full rounded">
+          <option value="">Selecione um cliente</option>
+          <option *ngFor="let cliente of clientes" [value]="cliente.id">{{ cliente.nome }}</option>
+        </select>
+        <small class="text-red-500" *ngIf="pedidoForm.get('idCliente')?.invalid && pedidoForm.get('idCliente')?.touched">
+          Cliente é obrigatório.
         </small>
       </div>
 
-      <div class="mb-2">
-        <label class="block font-medium">Produto:</label>
-        <select formControlName="idItem" class="border p-2 w-full rounded">
-          <option value="">Selecione um produto</option>
-          <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nome }}</option>
-        </select>
-        <small class="text-red-500" *ngIf="pedidoForm.get('idItem')?.invalid && pedidoForm.get('idItem')?.touched">
-          Produto é obrigatório.
-        </small>
+      <div formArrayName="itens">
+        <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-2">
+          <div class="mb-2">
+            <label class="block font-medium">Produto:</label>
+            <select formControlName="idSalgado" class="border p-2 w-full rounded">
+              <option value="">Selecione um produto</option>
+              <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nome }}</option>
+            </select>
+            <small class="text-red-500" *ngIf="item.get('idSalgado')?.invalid && item.get('idSalgado')?.touched">
+              Produto é obrigatório.
+            </small>
+          </div>
+          <div class="mb-2">
+            <label class="block font-medium">Quantidade:</label>
+            <input type="number" formControlName="quantidade" class="border p-2 w-full rounded" min="1" />
+            <small class="text-red-500" *ngIf="item.get('quantidade')?.invalid && item.get('quantidade')?.touched">
+              Quantidade deve ser maior que zero.
+            </small>
+          </div>
+          <div class="flex justify-end">
+            <button type="button" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
+              (click)="removerItem(i)" *ngIf="itens.length > 1">Remover</button>
+          </div>
+        </div>
       </div>
+      <button type="button" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 mb-4"
+        (click)="adicionarItem()">Adicionar Salgado</button>
 
       <div class="flex gap-2">
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-          Salvar
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          [disabled]="pedidoForm.invalid">
+          Salvar Pedido
         </button>
-        <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" (click)="cancelarFormulario()">
+        <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+          (click)="cancelarFormulario()">
           Cancelar
         </button>
       </div>
     </form>
   </div>
 
-  <!-- Tabela -->
-  <table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
-    <thead>
-      <tr class="bg-gray-100 text-gray-700">
-        <th class="text-left px-4 py-2 border-b">ID</th>
-        <th class="text-left px-4 py-2 border-b">quantidade</th>
-        <th class="text-left px-4 py-2 border-b">Produto</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let pedido of pedidos" class="border-t hover:bg-gray-50">
-        <td class="px-4 py-2">{{ pedido.id }}</td>
-        <td class="px-4 py-2">{{ pedido.quantidade | currency : "BRL" }}</td>
-        <td class="px-4 py-2">{{ pedido.produtoNome || "N/A" }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Lista local de pedidos criados -->
+  <div *ngIf="pedidos.length > 0" class="mt-8">
+    <h2 class="text-lg font-semibold mb-2">Pedidos Criados</h2>
+    <table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
+      <thead>
+        <tr class="bg-gray-100 text-gray-700">
+          <th class="text-left px-4 py-2 border-b">Cliente</th>
+          <th class="text-left px-4 py-2 border-b">Itens</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pedido of pedidos">
+          <td class="px-4 py-2">{{ getNomeCliente(pedido.idCliente) }}</td>
+          <td class="px-4 py-2">
+            <ul>
+              <li *ngFor="let item of pedido.itens">
+                {{ getNomeProduto(item.idSalgado) }} - {{ item.quantidade }}
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

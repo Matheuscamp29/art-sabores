@@ -6,27 +6,31 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PedidoClienteService {
-  private apiUrl = 'https://localhost:32771/api/v1';
+  private apiUrl = 'https://localhost:32769/api/v1';
 
   constructor(private http: HttpClient) {}
 
-  // Método para obter todos os pedidos de clientes
+  // Buscar todos os pedidos de clientes
   getPedidosClientes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getPedidosClientes`);
   }
 
-    // Método para obter todos os pedidos de clientes
+  // Buscar todos os salgados
   getSalgados(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getSalgados`);
   }
 
+  // Buscar todos os clientes
+  getClientes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getClientes`);
+  }
 
-  // Método para criar um novo pedido de cliente
+  // Criar um novo pedido de cliente
   createPedidoCliente(pedido: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/PedidoCliente/fechar`, pedido);
   }
 
-  // Método para deletar um pedido de cliente
+  // Deletar um pedido de cliente
   deletePedidoCliente(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/PedidoCliente/deletar/${id}`);
   }
