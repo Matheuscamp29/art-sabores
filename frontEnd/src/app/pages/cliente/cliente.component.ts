@@ -1,11 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { ClienteService } from './cliente.service'; // <- IMPORTANTE
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ClienteService } from './cliente.service';
+import { HeaderComponent } from "../header/header.component"; // <- IMPORTANTE
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cliente',
+  standalone: true,
   templateUrl: './cliente.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    HeaderComponent // <- necessário para reconhecer <app-header>
+  ]
 })
 export class ClienteComponent implements OnInit {
   clientes: any[] = [];
