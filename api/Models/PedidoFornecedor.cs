@@ -7,5 +7,6 @@ namespace Art_Sabores.Models
     {
         [Key]
         public int Id { get; set; }
+        public ICollection<ItemMateriaPrima> Itens { get; set; }
     }
 }

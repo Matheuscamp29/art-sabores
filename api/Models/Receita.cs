@@ -13,12 +13,13 @@ namespace Art_Sabores.Models
         public required String unidade {  get; set; }
         public bool FlagConstante { get; set; }
         public int Rendimento { get; set; }
-        [ForeignKey("Materia_prima")]
+
+        [ForeignKey(nameof(Models.MateriaPrima))]
         public int IdMateriaPrima { get; set; }
-        public MateriaPrima? materiaPrima { get; set; }
-        [ForeignKey("Salgado")]
+        public MateriaPrima? MateriaPrima { get; set; }
+        [ForeignKey(nameof(Models.Salgado))]
         public int IdSalgado { get; set; }
-        public Salgado? salgado { get; set; }
+        public Salgado? Salgado { get; set; }
 
     }
 }

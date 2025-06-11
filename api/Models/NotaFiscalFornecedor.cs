@@ -8,11 +8,11 @@ namespace Art_Sabores.Models
         [Key]
         public required String NFE { get; set; }
         public DateTime dateTime { get; set; }
-        [ForeignKey("Fornecedor")]
+        [ForeignKey(nameof(Models.Fornecedor))]
         public int IdFornecedor { get; set; }
-        public Fornecedor? fornecedor { get; set; }
-        [ForeignKey("PedidoFornecedor")]
+        public Fornecedor? Fornecedor { get; set; }
+        [ForeignKey(nameof(Models.PedidoFornecedor))]
         public int IdPedido { get; set; }
-        public PedidoFornecedor? pedidoFornecedor { get; set; }
+        public PedidoFornecedor? PedidoFornecedor { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Art_Sabores.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Art_Sabores.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class DAOModelSnapshot : ModelSnapshot
+    [Migration("20250611210141_BancoConcluido")]
+    partial class BancoConcluido
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,23 +78,20 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("IdMateriaPrima")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPedidoFornecedor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MateriaPrimaId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PedidoFornecedorId")
+                    b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
+                    b.Property<int?>("materiaPrimaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("MateriaPrimaId");
+                    b.HasIndex("IdPedido");
 
-                    b.HasIndex("PedidoFornecedorId");
+                    b.HasIndex("materiaPrimaId");
 
                     b.ToTable("ItemsMateriaPrima");
                 });
@@ -104,7 +104,7 @@ namespace Art_Sabores.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdPedidoCliente")
+                    b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
                     b.Property<int>("IdSalgado")
@@ -113,11 +113,17 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("Quantidade")
                         .HasColumnType("int");
 
+                    b.Property<int?>("pedidoClienteId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("salgadoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdPedidoCliente");
+                    b.HasIndex("pedidoClienteId");
 
-                    b.HasIndex("IdSalgado");
+                    b.HasIndex("salgadoId");
 
                     b.ToTable("ItemSalgados");
                 });
@@ -147,26 +153,26 @@ namespace Art_Sabores.Migrations
                     b.Property<string>("NFE")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ClienteId")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPedidoCliente")
+                    b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PedidoClienteId")
+                    b.Property<int?>("clienteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("pedidoClienteId")
+                        .HasColumnType("int");
+
                     b.HasKey("NFE");
 
-                    b.HasIndex("ClienteId");
+                    b.HasIndex("clienteId");
 
-                    b.HasIndex("PedidoClienteId");
+                    b.HasIndex("pedidoClienteId");
 
                     b.ToTable("Vendas_Clientes_Receita");
                 });
@@ -176,26 +182,26 @@ namespace Art_Sabores.Migrations
                     b.Property<string>("NFE")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("FornecedorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdFornecedor")
                         .HasColumnType("int");
 
                     b.Property<int>("IdPedido")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PedidoFornecedorId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("dateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("fornecedorId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("pedidoFornecedorId")
+                        .HasColumnType("int");
+
                     b.HasKey("NFE");
 
-                    b.HasIndex("FornecedorId");
+                    b.HasIndex("fornecedorId");
 
-                    b.HasIndex("PedidoFornecedorId");
+                    b.HasIndex("pedidoFornecedorId");
 
                     b.ToTable("Vendas_Fornecedores_MateriaPrima");
                 });
@@ -243,16 +249,16 @@ namespace Art_Sabores.Migrations
                     b.Property<int>("IdSalgado")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MateriaPrimaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("QuantidadeMatPrim")
                         .HasColumnType("int");
 
                     b.Property<int>("Rendimento")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SalgadoId")
+                    b.Property<int?>("materiaPrimaId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("salgadoId")
                         .HasColumnType("int");
 
                     b.Property<string>("unidade")
@@ -261,9 +267,9 @@ namespace Art_Sabores.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MateriaPrimaId");
+                    b.HasIndex("materiaPrimaId");
 
-                    b.HasIndex("SalgadoId");
+                    b.HasIndex("salgadoId");
 
                     b.ToTable("Receitas");
                 });
@@ -292,81 +298,79 @@ namespace Art_Sabores.Migrations
 
             modelBuilder.Entity("Art_Sabores.Models.ItemMateriaPrima", b =>
                 {
-                    b.HasOne("Art_Sabores.Models.MateriaPrima", "MateriaPrima")
-                        .WithMany()
-                        .HasForeignKey("MateriaPrimaId");
-
                     b.HasOne("Art_Sabores.Models.PedidoFornecedor", "PedidoFornecedor")
                         .WithMany("Itens")
-                        .HasForeignKey("PedidoFornecedorId");
+                        .HasForeignKey("IdPedido")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("MateriaPrima");
+                    b.HasOne("Art_Sabores.Models.MateriaPrima", "materiaPrima")
+                        .WithMany()
+                        .HasForeignKey("materiaPrimaId");
 
                     b.Navigation("PedidoFornecedor");
+
+                    b.Navigation("materiaPrima");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.ItemSalgado", b =>
                 {
-                    b.HasOne("Art_Sabores.Models.PedidoCliente", "PedidoCliente")
+                    b.HasOne("Art_Sabores.Models.PedidoCliente", "pedidoCliente")
                         .WithMany("Itens")
-                        .HasForeignKey("IdPedidoCliente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("pedidoClienteId");
 
-                    b.HasOne("Art_Sabores.Models.Salgado", "Salgado")
+                    b.HasOne("Art_Sabores.Models.Salgado", "salgado")
                         .WithMany()
-                        .HasForeignKey("IdSalgado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("salgadoId");
 
-                    b.Navigation("PedidoCliente");
+                    b.Navigation("pedidoCliente");
 
-                    b.Navigation("Salgado");
+                    b.Navigation("salgado");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.NotaFiscalCliente", b =>
                 {
-                    b.HasOne("Art_Sabores.Models.Cliente", "Cliente")
+                    b.HasOne("Art_Sabores.Models.Cliente", "cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteId");
+                        .HasForeignKey("clienteId");
 
-                    b.HasOne("Art_Sabores.Models.PedidoCliente", "PedidoCliente")
+                    b.HasOne("Art_Sabores.Models.PedidoCliente", "pedidoCliente")
                         .WithMany()
-                        .HasForeignKey("PedidoClienteId");
+                        .HasForeignKey("pedidoClienteId");
 
-                    b.Navigation("Cliente");
+                    b.Navigation("cliente");
 
-                    b.Navigation("PedidoCliente");
+                    b.Navigation("pedidoCliente");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.NotaFiscalFornecedor", b =>
                 {
-                    b.HasOne("Art_Sabores.Models.Fornecedor", "Fornecedor")
+                    b.HasOne("Art_Sabores.Models.Fornecedor", "fornecedor")
                         .WithMany()
-                        .HasForeignKey("FornecedorId");
+                        .HasForeignKey("fornecedorId");
 
-                    b.HasOne("Art_Sabores.Models.PedidoFornecedor", "PedidoFornecedor")
+                    b.HasOne("Art_Sabores.Models.PedidoFornecedor", "pedidoFornecedor")
                         .WithMany()
-                        .HasForeignKey("PedidoFornecedorId");
+                        .HasForeignKey("pedidoFornecedorId");
 
-                    b.Navigation("Fornecedor");
+                    b.Navigation("fornecedor");
 
-                    b.Navigation("PedidoFornecedor");
+                    b.Navigation("pedidoFornecedor");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.Receita", b =>
                 {
-                    b.HasOne("Art_Sabores.Models.MateriaPrima", "MateriaPrima")
+                    b.HasOne("Art_Sabores.Models.MateriaPrima", "materiaPrima")
                         .WithMany()
-                        .HasForeignKey("MateriaPrimaId");
+                        .HasForeignKey("materiaPrimaId");
 
-                    b.HasOne("Art_Sabores.Models.Salgado", "Salgado")
+                    b.HasOne("Art_Sabores.Models.Salgado", "salgado")
                         .WithMany()
-                        .HasForeignKey("SalgadoId");
+                        .HasForeignKey("salgadoId");
 
-                    b.Navigation("MateriaPrima");
+                    b.Navigation("materiaPrima");
 
-                    b.Navigation("Salgado");
+                    b.Navigation("salgado");
                 });
 
             modelBuilder.Entity("Art_Sabores.Models.PedidoCliente", b =>

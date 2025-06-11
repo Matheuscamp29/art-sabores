@@ -1,4 +1,6 @@
-﻿namespace Art_Sabores.DTOs
+﻿using Art_Sabores.Models;
+
+namespace Art_Sabores.DTOs
 {
     public class ItemSalgadoDTO
     {

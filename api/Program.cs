@@ -3,6 +3,7 @@ using Art_Sabores.Models;
 using Art_Sabores.DTOs;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
+using Microsoft.AspNetCore.Builder;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -225,7 +226,7 @@ app.MapPost("/api/v1/PedidoCliente/fechar", async (PedidoClienteDTO dto, AppDbCo
         dao.ItemSalgados.Add(new ItemSalgado
         {
             IdSalgado = item.IdSalgado,
-            IdPedido = pedido.Id,
+            IdPedidoCliente = pedido.Id,
             Quantidade = item.Quantidade
         });
     }
@@ -236,26 +237,57 @@ app.MapPost("/api/v1/PedidoCliente/fechar", async (PedidoClienteDTO dto, AppDbCo
         NFE = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
         dateTime = DateTime.Now,
         IdCliente = dto.IdCliente,
-        IdPedido = pedido.Id
+        IdPedidoCliente = pedido.Id
     };
     dao.Vendas_Clientes_Receita.Add(nota);
 
     await dao.SaveChangesAsync();
 
     return Results.Ok(new { PedidoId = pedido.Id, NotaFiscal = nota.NFE });
-
 });
+
+app.MapGet("api/v1/PedidoCliente/get", async (AppDbContext dao) =>
+{
+    var notasFiscais = await dao.Vendas_Clientes_Receita
+    .Include(n => n.Cliente)
+    .Include(n => n.PedidoCliente)
+        .ThenInclude(p => p.Itens)
+        .ThenInclude(s => s.Salgado)
+     .ToListAsync();
+    var resultado = notasFiscais.Select(nota => new GetPedidoClienteDTO
+    {
+        cliente = new ClienteDTO
+        {
+            Id = nota.Cliente.Id,
+            Nome = nota.Cliente.Nome
+        },
+        Itens = nota.PedidoCliente.Itens.Select(item => new GetItemSalgadoDTO
+        {
+            salgado = new SalgadoDTO
+            {
+                Nome = item.Salgado.Nome,
+                Preco = item.Salgado.Preco
+            },
+            Quantidade = item.Quantidade,
+            Subtotal = item.Quantidade * item.Salgado.Preco
+        }).ToList()
+    }).ToList();
+    return Results.Ok(resultado);
+});
+
+//app.MapGet("/api/v1/getClientes", async (AppDbContext dao) =>
+  //  await dao.Clientes.ToListAsync());
 
 app.MapDelete("/api/v1/PedidoCliente/deletar/{id}", async (int id, AppDbContext dao) =>
 {
     var pedido = await dao.PedidosCliente.FindAsync(id);
-    if (pedido == null)
+    if (pedido == null) 
         Results.NotFound("Pedido não encontrado.");
 
-    var itens = dao.ItemSalgados.Where(i => i.IdPedido == id);
+    var itens = dao.ItemSalgados.Where(i => i.IdPedidoCliente == id);
     dao.ItemSalgados.RemoveRange(itens);
 
-    var nota = await dao.Vendas_Clientes_Receita.FirstOrDefaultAsync(n => n.IdPedido == id);
+    var nota = await dao.Vendas_Clientes_Receita.FirstOrDefaultAsync(n => n.IdPedidoCliente == id);
     if (nota != null)
         dao.Vendas_Clientes_Receita.Remove(nota);
 
@@ -280,7 +312,7 @@ app.MapPost("/api/v1/PedidoFornecedor/fechar", async (PedidoFornecedorDTO dto, A
         dao.ItemsMateriaPrima.Add(new ItemMateriaPrima
         {
             IdMateriaPrima = item.IdMateriaPrima,
-            IdPedido = pedido.Id,
+            IdPedidoFornecedor = pedido.Id,
             Quantidade = item.Quantidade
         });
     }
@@ -307,7 +339,7 @@ app.MapDelete("/api/v1/PedidoFornecedor/deletar/{id}", async (int id, AppDbConte
     if (pedido == null)
         Results.NotFound("Pedido não encontrado.");
 
-    var itens = dao.ItemsMateriaPrima.Where(i => i.IdPedido == id);
+    var itens = dao.ItemsMateriaPrima.Where(i => i.IdPedidoFornecedor == id);
     dao.ItemsMateriaPrima.RemoveRange(itens);
 
     var nota = await dao.Vendas_Fornecedores_MateriaPrima.FirstOrDefaultAsync(n => n.IdPedido == id);
