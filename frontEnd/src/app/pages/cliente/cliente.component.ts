@@ -1,43 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HeaderComponent } from '../header/header.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { ClienteService } from './cliente.service'; // <- IMPORTANTE
 
 @Component({
   selector: 'app-cliente',
-  standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, HeaderComponent],
-  templateUrl: './cliente.component.html'
+  templateUrl: './cliente.component.html',
 })
 export class ClienteComponent implements OnInit {
   clientes: any[] = [];
   mostrarFormulario = false;
   clienteForm!: FormGroup;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(
+    private http: HttpClient,
+    private clienteService: ClienteService, // <- AQUI
+    private fb: FormBuilder
+  ) {}
 
-  ngOnInit(): void {
-    this.http.get<any[]>('https://localhost:32771/api/v1/getClientes')
+  ngOnInit() {
+    this.clienteService.getClientes()
       .subscribe(data => this.clientes = data);
   }
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
-
     if (this.mostrarFormulario && !this.clienteForm) {
       this.clienteForm = this.fb.group({
-      nome: ['', Validators.required],
-      telefone: ['', [Validators.required, Validators.pattern('^\\+?[0-9]*$')]]
-    });
+        nome: ['', Validators.required],
+        telefone: ['', [Validators.required, Validators.pattern('^\\+?[0-9]*$')]]
+      });
     }
   }
 
   salvarCliente() {
     if (this.clienteForm.valid) {
       const novoCliente = this.clienteForm.value;
-
-      this.http.post('https://localhost:32771/api/v1/cliente', novoCliente)
+      this.clienteService.createCliente(novoCliente)
         .subscribe(response => {
           this.clientes.push(response);
           this.mostrarFormulario = false;
