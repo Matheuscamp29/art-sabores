@@ -5,7 +5,7 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-cliente',
+  selector: 'app-pedido-cliente',
   standalone: true,
   templateUrl: './pedido-cliente.component.html',
   imports: [
