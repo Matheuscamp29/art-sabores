@@ -21,7 +21,7 @@ export class PedidoClienteComponent implements OnInit {
   pedidoForm!: FormGroup;
   produtos: any[] = []; // Lista de produtos para o select
 
-  private apiUrl = 'https://localhost:32771/api/v1';
+  private apiUrl = 'https://localhost:32769/api/v1';
 
   constructor(private http: HttpClient, private fb: FormBuilder) {}
 
@@ -36,7 +36,7 @@ export class PedidoClienteComponent implements OnInit {
   }
 
   carregarProdutos() {
-    this.http.get<any[]>(`${this.apiUrl}/getProdutos`)
+    this.http.get<any[]>(`${this.apiUrl}/getSalgados`)
       .subscribe(data => this.produtos = data);
   }
 

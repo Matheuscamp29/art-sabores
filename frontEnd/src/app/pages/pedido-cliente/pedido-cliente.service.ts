@@ -15,6 +15,12 @@ export class PedidoClienteService {
     return this.http.get<any[]>(`${this.apiUrl}/getPedidosClientes`);
   }
 
+    // Método para obter todos os pedidos de clientes
+  getSalgados(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/getSalgados`);
+  }
+
+
   // Método para criar um novo pedido de cliente
   createPedidoCliente(pedido: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/PedidoCliente/fechar`, pedido);
