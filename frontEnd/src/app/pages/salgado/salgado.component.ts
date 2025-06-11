@@ -6,14 +6,14 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-cliente',
+  selector: 'app-salgado',
   standalone: true,
   templateUrl: './salgado.component.html',
   imports: [
     CommonModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HeaderComponent // <- necessário para reconhecer <app-header>
+    HeaderComponent 
   ]
 })
 export class SalgadoComponent implements OnInit {
