@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { PedidoClienteService } from './pedido-cliente.service'; // <-- IMPORTANTE!
 import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 
@@ -16,21 +17,29 @@ import { CommonModule } from '@angular/common';
   ]
 })
 export class PedidoClienteComponent implements OnInit {
-  public pedidos: any[] = []; // Lista local
+  public pedidos: any[] = [];
   public mostrarFormulario = false;
   public pedidoForm!: FormGroup;
   public produtos: any[] = [];
   public clientes: any[] = [];
 
-  private apiUrl = 'https://localhost:32769/api/v1';
+  private apiUrl = 'https://localhost:32777/api/v1';
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {}
+  constructor(
+    private http: HttpClient,
+    private fb: FormBuilder,
+    private pedidoClienteService: PedidoClienteService // <-- INJETADO AQUI!
+  ) {}
 
   public ngOnInit() {
     this.carregarProdutos();
     this.carregarClientes();
+    this.carregarPedidos();
   }
-
+  public carregarPedidos() {
+    this.http.get<any[]>(`${this.apiUrl}/PedidoCliente/get`)
+      .subscribe(data => this.pedidos = data);
+  }
   public carregarProdutos() {
     this.http.get<any[]>(`${this.apiUrl}/getSalgados`)
       .subscribe(data => this.produtos = data);
@@ -39,6 +48,10 @@ export class PedidoClienteComponent implements OnInit {
   public carregarClientes() {
     this.http.get<any[]>(`${this.apiUrl}/getClientes`)
       .subscribe(data => this.clientes = data);
+  }
+
+  public getTotalPedido(pedido: any): number {
+    return pedido.itens.reduce((total: number, item: any) => total + (item.subtotal || 0), 0);
   }
 
   public toggleFormulario() {
@@ -74,20 +87,28 @@ export class PedidoClienteComponent implements OnInit {
   }
 
   public salvarPedido() {
-    if (this.pedidoForm.valid) {
-      const pedidoDTO = {
-        idCliente: Number(this.pedidoForm.value.idCliente),
-        itens: this.pedidoForm.value.itens.map((item: any) => ({
-          idSalgado: Number(item.idSalgado),
-          quantidade: Number(item.quantidade)
-        }))
-      };
+  if (this.pedidoForm.valid) {
+    const pedidoDTO = {
+      idCliente: Number(this.pedidoForm.value.idCliente),
+      itens: this.pedidoForm.value.itens.map((item: any) => ({
+        idSalgado: Number(item.idSalgado),
+        quantidade: Number(item.quantidade)
+      }))
+    };
 
-      this.pedidos.push(pedidoDTO);
-      this.mostrarFormulario = false;
-      this.pedidoForm.reset();
-    }
+    this.pedidoClienteService.createPedidoCliente(pedidoDTO).subscribe({
+      next: () => {
+        this.carregarPedidos();
+        this.mostrarFormulario = false;
+        this.pedidoForm.reset();
+      },
+      error: (err) => {
+        alert('Erro ao salvar pedido');
+        console.error('Erro ao salvar pedido:', err);
+      }
+    });
   }
+}
 
   public cancelarFormulario() {
     this.mostrarFormulario = false;

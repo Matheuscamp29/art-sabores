@@ -12,7 +12,7 @@ export class PedidoClienteService {
 
   // Buscar todos os pedidos de clientes
   getPedidosClientes(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getPedidosClientes`);
+    return this.http.get<any[]>(`${this.apiUrl}/PedidoCliente/get`);
   }
 
   // Buscar todos os salgados
@@ -34,4 +34,6 @@ export class PedidoClienteService {
   deletePedidoCliente(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/PedidoCliente/deletar/${id}`);
   }
+
+  
 }
