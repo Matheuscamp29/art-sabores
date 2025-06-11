@@ -19,6 +19,11 @@ import { HeaderComponent } from "../header/header.component";
 })
 
 export class MateriaPrimaComponent {
+fornecedores: any;
+itens: any;
+salvarMP() {
+throw new Error('Method not implemented.');
+}
   mostrarFormulario = false;
   materiaPrimaForm: FormGroup;
   materias: { nome: string; estoque: number }[] = [];

@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-pedido-cliente',
+  selector: 'app-cliente',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
-  templateUrl: './pedido-cliente.component.html'
+  templateUrl: './pedido-cliente.component.html',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    HeaderComponent // <- necessário para reconhecer <app-header>
+  ]
 })
 export class PedidoClienteComponent implements OnInit {
   pedidos: any[] = [];

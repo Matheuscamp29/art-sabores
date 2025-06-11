@@ -1,69 +1,60 @@
 <app-header></app-header>
 <div class="p-6 max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Pedidos de Clientes</h1>
-        <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" (click)="toggleFormulario()">
-            {{ mostrarFormulario ? "Fechar Formulário" : "Novo Pedido" }}
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Pedidos de Clientes</h1>
+    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" (click)="toggleFormulario()">
+      {{ mostrarFormulario ? "Fechar Formulário" : "Novo Pedido" }}
+    </button>
+  </div>
+
+  <!-- Formulário -->
+  <div *ngIf="mostrarFormulario" class="mb-6 p-4 bg-gray-100 rounded-lg">
+    <form [formGroup]="pedidoForm" (ngSubmit)="salvarPedido()">
+      <div class="mb-2">
+        <label class="block font-medium">Subtotal:</label>
+        <input type="number" formControlName="subtotal" class="border p-2 w-full rounded" min="0" />
+        <small class="text-red-500" *ngIf="pedidoForm.get('subtotal')?.invalid && pedidoForm.get('subtotal')?.touched">
+          Subtotal deve ser um valor positivo.
+        </small>
+      </div>
+
+      <div class="mb-2">
+        <label class="block font-medium">Produto:</label>
+        <select formControlName="idItem" class="border p-2 w-full rounded">
+          <option value="">Selecione um produto</option>
+          <option *ngFor="let produto of produtos" [value]="produto.id">{{ produto.nome }}</option>
+        </select>
+        <small class="text-red-500" *ngIf="pedidoForm.get('idItem')?.invalid && pedidoForm.get('idItem')?.touched">
+          Produto é obrigatório.
+        </small>
+      </div>
+
+      <div class="flex gap-2">
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+          Salvar
         </button>
-    </div>
+        <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500" (click)="cancelarFormulario()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
 
-    <!-- Formulário -->
-    <div *ngIf="mostrarFormulario" class="mb-6 p-4 bg-gray-100 rounded-lg">
-        <form [formGroup]="pedidoForm" (ngSubmit)="salvarPedido()">
-            <div class="mb-2">
-                <label class="block font-medium">Subtotal:</label>
-                <input type="number" formControlName="subtotal" class="border p-2 w-full rounded" min="0" />
-                <small class="text-red-500" *ngIf="
-            pedidoForm.get('subtotal')?.invalid &&
-            pedidoForm.get('subtotal')?.touched
-          ">
-                    Subtotal deve ser um valor positivo.
-                </small>
-            </div>
-
-            <div class="mb-2">
-                <label class="block font-medium">Produto:</label>
-                <select formControlName="idItem" class="border p-2 w-full rounded">
-                    <option value="">Selecione um produto</option>
-                    <option *ngFor="let produto of produtos" [value]="produto.id">
-                        {{ produto.nome }}
-                    </option>
-                </select>
-                <small class="text-red-500" *ngIf="
-            pedidoForm.get('idItem')?.invalid &&
-            pedidoForm.get('idItem')?.touched
-          ">
-                    Produto é obrigatório.
-                </small>
-            </div>
-
-            <div class="flex gap-2">
-                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
-                    Salvar
-                </button>
-                <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    (click)="cancelarFormulario()">
-                    Cancelar
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <!-- Tabela -->
-    <table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
-        <thead>
-            <tr class="bg-gray-100 text-gray-700">
-                <th class="text-left px-4 py-2 border-b">ID</th>
-                <th class="text-left px-4 py-2 border-b">Subtotal</th>
-                <th class="text-left px-4 py-2 border-b">Produto</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let pedido of pedidos" class="border-t hover:bg-gray-50">
-                <td class="px-4 py-2">{{ pedido.id }}</td>
-                <td class="px-4 py-2">{{ pedido.subtotal | currency : "BRL" }}</td>
-                <td class="px-4 py-2">{{ pedido.produtoNome || "N/A" }}</td>
-            </tr>
-        </tbody>
-    </table>
+  <!-- Tabela -->
+  <table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
+    <thead>
+      <tr class="bg-gray-100 text-gray-700">
+        <th class="text-left px-4 py-2 border-b">ID</th>
+        <th class="text-left px-4 py-2 border-b">Subtotal</th>
+        <th class="text-left px-4 py-2 border-b">Produto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let pedido of pedidos" class="border-t hover:bg-gray-50">
+        <td class="px-4 py-2">{{ pedido.id }}</td>
+        <td class="px-4 py-2">{{ pedido.subtotal | currency : "BRL" }}</td>
+        <td class="px-4 py-2">{{ pedido.produtoNome || "N/A" }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
