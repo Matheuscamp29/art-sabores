@@ -6,7 +6,5 @@ namespace Art_Sabores.DTOs
     {
         public int IdMateriaPrima { get; set; }
         public int Quantidade { get; set; }
-
-        public MateriaPrimaDTO MateriaPrima { get; set; }
     }
 }

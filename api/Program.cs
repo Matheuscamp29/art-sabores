@@ -33,10 +33,6 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader());
 });
 
-
-
-
-
 var app = builder.Build();
 app.UseCors("AllowAll");
 
@@ -320,7 +316,7 @@ app.MapPost("/api/v1/PedidoFornecedor/fechar", async (PedidoFornecedorDTO dto, A
 
     var nota = new NotaFiscalFornecedor
     {
-        NFE = Guid.NewGuid().ToString().Substring(0, 50).ToUpper(),
+        NFE = Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
         dateTime = DateTime.Now,
         IdFornecedor = dto.IdFornecedor,
         IdPedido = pedido.Id
@@ -331,6 +327,35 @@ app.MapPost("/api/v1/PedidoFornecedor/fechar", async (PedidoFornecedorDTO dto, A
 
     return Results.Ok(new { PedidoId = pedido.Id, NotaFiscal = nota.NFE });
 
+});
+
+
+app.MapGet("api/v1/PedidoFornecedor/get", async (AppDbContext dao) =>
+{
+    var notasFiscais = await dao.Vendas_Fornecedores_MateriaPrima
+    .Include(n => n.Fornecedor)
+    .Include(n => n.PedidoFornecedor)
+        .ThenInclude(p => p.Itens)
+        .ThenInclude(m => m.MateriaPrima)
+     .ToListAsync();
+    var resultado = notasFiscais.Select(nota => new GetPedidoFornecedorDTO
+    {
+        fornecedor = new FornecedorDTO
+        {
+            Id = nota.Fornecedor.Id,
+            Nome = nota.Fornecedor.nome,
+            CNPJ = nota.Fornecedor.CNPJ
+        },
+        Itens = nota.PedidoFornecedor.Itens.Select(item => new GetItemMateriaPrimaDTO
+        {
+            materiaPrima = new MateriaPrimaDTO
+            {
+                Nome = item.MateriaPrima.Nome
+            },
+            Quantidade = item.Quantidade
+        }).ToList()
+    }).ToList();
+    return Results.Ok(resultado);
 });
 
 app.MapDelete("/api/v1/PedidoFornecedor/deletar/{id}", async (int id, AppDbContext dao) =>
