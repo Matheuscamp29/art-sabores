@@ -10,6 +10,7 @@
   <!-- Formulário -->
   <div *ngIf="mostrarFormulario" class="mb-6 p-4 bg-gray-100 rounded-lg">
     <form [formGroup]="pedidoForm" (ngSubmit)="salvarPedido()">
+      <!-- Cliente -->
       <div class="mb-2">
         <label class="block font-medium">Cliente:</label>
         <select formControlName="idCliente" class="border p-2 w-full rounded">
@@ -21,6 +22,7 @@
         </small>
       </div>
 
+      <!-- Itens do pedido -->
       <div formArrayName="itens">
         <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="border rounded p-3 mb-2">
           <div class="mb-2">
@@ -62,25 +64,29 @@
     </form>
   </div>
 
-  <!-- Lista local de pedidos criados -->
+  <!-- Lista de pedidos vindos do backend -->
   <div *ngIf="pedidos.length > 0" class="mt-8">
-    <h2 class="text-lg font-semibold mb-2">Pedidos Criados</h2>
+    <h2 class="text-lg font-semibold mb-2">Pedidos</h2>
     <table class="min-w-full bg-white border border-gray-200 shadow-sm rounded-lg">
       <thead>
         <tr class="bg-gray-100 text-gray-700">
           <th class="text-left px-4 py-2 border-b">Cliente</th>
           <th class="text-left px-4 py-2 border-b">Itens</th>
+          <th class="text-left px-4 py-2 border-b">Subtotal</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let pedido of pedidos">
-          <td class="px-4 py-2">{{ getNomeCliente(pedido.idCliente) }}</td>
+          <td class="px-4 py-2 font-medium">{{ pedido.cliente?.nome }}</td>
           <td class="px-4 py-2">
             <ul>
               <li *ngFor="let item of pedido.itens">
-                {{ getNomeProduto(item.idSalgado) }} - {{ item.quantidade }}
+                {{ item.salgado?.nome }} ({{ item.quantidade }} x {{ item.salgado?.preco | currency:'BRL':'symbol':'1.2-2' }}) = <b>{{ item.subtotal | currency:'BRL':'symbol':'1.2-2' }}</b>
               </li>
             </ul>
+          </td>
+          <td class="px-4 py-2 font-semibold">
+            {{ getTotalPedido(pedido) | currency:'BRL':'symbol':'1.2-2' }}
           </td>
         </tr>
       </tbody>

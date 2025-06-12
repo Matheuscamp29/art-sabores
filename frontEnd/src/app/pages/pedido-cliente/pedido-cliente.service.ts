@@ -6,13 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PedidoClienteService {
-  private apiUrl = 'https://localhost:32769/api/v1';
+  private apiUrl = 'https://localhost:32777/api/v1';
 
   constructor(private http: HttpClient) {}
 
   // Buscar todos os pedidos de clientes
   getPedidosClientes(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getPedidosClientes`);
+    return this.http.get<any[]>(`${this.apiUrl}/PedidoCliente/get`);
   }
 
   // Buscar todos os salgados
@@ -34,4 +34,6 @@ export class PedidoClienteService {
   deletePedidoCliente(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/PedidoCliente/deletar/${id}`);
   }
+
+  
 }
