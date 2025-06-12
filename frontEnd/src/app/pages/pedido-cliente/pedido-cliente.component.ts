@@ -23,7 +23,7 @@ export class PedidoClienteComponent implements OnInit {
   public produtos: any[] = [];
   public clientes: any[] = [];
 
-  private apiUrl = 'https://localhost:32777/api/v1';
+  private apiUrl = 'https://localhost:32779/api/v1';
 
   constructor(
     private http: HttpClient,

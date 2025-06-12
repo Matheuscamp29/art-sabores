@@ -23,7 +23,7 @@ export class MateriaPrimaComponent implements OnInit {
   fornecedores: any[] = [];
   editandoMP: any = null; // <- variável de controle
 
-  private apiUrl = 'https://localhost:32769/api/v1';
+  private apiUrl = 'https://localhost:32779/api/v1';
 
   constructor(
     private materiaPrimaService: MateriaPrimaService,

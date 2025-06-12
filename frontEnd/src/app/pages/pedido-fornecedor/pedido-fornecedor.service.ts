@@ -6,13 +6,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PedidoFornecedorService {
-  private apiUrl = 'https://localhost:32771/api/v1'; // URL da API do back-end
+  private apiUrl = 'https://localhost:32779/api/v1'; // URL da API do back-end
 
   constructor(private http: HttpClient) {}
 
   // Método para obter todos os pedidos de fornecedores
   getPedidosFornecedores(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/getPedidosFornecedores`);
+    return this.http.get<any[]>(`${this.apiUrl}/PedidoFornecedor/get`);
   }
 
   // Método para criar um novo pedido de fornecedor
@@ -24,9 +24,14 @@ export class PedidoFornecedorService {
   deletePedidoFornecedor(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/PedidoFornecedor/deletar/${id}`);
   }
+  getFornecedores(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/getFornecedores`);
+}
 
   // Método para obter todas as matérias-primas
   getMateriasPrimas(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/getMateriasPrimas`);
   }
+
+  
 }
