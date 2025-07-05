@@ -34,3 +34,4 @@ Os dados são armazenados e gerenciados em um banco de dados **MySQL** hospedado
 - C# / .NET  
 - MySQL  
 - Microsoft Azure
+- Doker
